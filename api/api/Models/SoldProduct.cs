@@ -59,8 +59,9 @@ namespace api.Models
 
 
         // constructor
-        public SoldProduct(int quantity, long productId, long saleId)
+        public SoldProduct(long id, int quantity, long productId, long saleId)
         {
+            _id = id;
             _quantity = quantity;
             _productId = productId;
             _saleId = saleId;

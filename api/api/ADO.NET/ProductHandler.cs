@@ -80,7 +80,7 @@ namespace api.ADO.NET
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    SqlCommand command = new SqlCommand("INSERTO INTO Producto VALUES " +
+                    SqlCommand command = new SqlCommand("INSERT INTO Producto VALUES " +
                         "(@descripciones, @costo, @precioVenta, @stock, @idUsuario)",
                         connection);
 
@@ -193,7 +193,7 @@ namespace api.ADO.NET
                     connection.Open();
                     SqlCommand command = new SqlCommand("UPDATE Producto SET " +
                         $"Descripciones = '{product.Description}', Costo = {product.Cost}, " +
-                        $"PrecioVenta = {product.SellingPrice}, Stock = {product.Stock}" +
+                        $"PrecioVenta = {product.SellingPrice}, Stock = {product.Stock}, " +
                         $"IdUsuario = {product.UserId} " +
                         $"WHERE Id = {product.Id}", connection);
                     command.ExecuteNonQuery();
@@ -227,7 +227,7 @@ namespace api.ADO.NET
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand("DELETE FROM Producto " +
-                    $"WHERE Id = {id}");
+                    $"WHERE Id = {id}", connection);
                 command.ExecuteNonQuery();
             }
         }

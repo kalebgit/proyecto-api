@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -13,15 +13,25 @@ namespace api.Controllers
         [HttpGet("Usuario/{usuario}/{contraseña}")]
         public User LogIn(string usuario, string contraseña)
         {
-            User user = UserHandler.LogIn(usuario, contraseña);
-            return user;
+            return UserHandler.LogIn(usuario, contraseña);
         }
 
         [HttpGet("Usuario/{usuario}")]
         public User FindUser(string usuario)
         {
-            User user = UserHandler.GetUser(usuario);
-            return user;
+            return UserHandler.GetUser(usuario);
+        }
+
+        [HttpGet("Usuario/{id}")]
+        public User FindUser(long id)
+        {
+            return UserHandler.GetUser(id);
+        }
+
+        [HttpGet("Usuarios")]
+        public List<User> FindUser()
+        {
+            return UserHandler.GetUsers();
         }
 
         // metodos http post
@@ -33,9 +43,10 @@ namespace api.Controllers
 
         // metodos http put
         [HttpPut("Usuario")]
-        public void UpdateUser([FromBody]User user)
+        public string UpdateUser([FromBody]User user)
         {
-            UserHandler.UpdateUser(user);
+            return UserHandler.UpdateUser(user) == 1 ? "se ha actualizado el usuario" :
+                "no se pudo actualizar el usuario";
         }
 
         // metodo http delete

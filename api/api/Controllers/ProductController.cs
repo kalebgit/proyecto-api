@@ -5,26 +5,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("/api/[controller]")]
+    [Route("/api/")]
     [ApiController]
     public class ProductController : ControllerBase
     {
-        [HttpGet("Producto/{idUsuario}")]
-        public void GetProduct(long userId)
+        [HttpGet("Producto/{id}")]
+        public Product GetProduct(long id)
         {
-            ProductHandler.GetProduct(userId);
+            return ProductHandler.GetProduct(id);
+        }
+
+        [HttpGet("Productos")]
+        public List<Product> GetProduct()
+        {
+            return ProductHandler.GetProducts();
         }
 
         [HttpPost("Producto")]
-        public void CreateProduct([FromBody]Product product)
+        public string CreateProduct([FromBody]Product product)
         {
-            ProductHandler.AddProducts(product);
+            return ProductHandler.AddProducts(product) == 1 ? "Se ha creado el producto" :
+                "No se pudo crear el producto";
         }
 
         [HttpPut("Producto")]
-        public void UpdateProduct([FromBody]Product product)
+        public string UpdateProduct([FromBody]Product product)
         {
-            ProductHandler.UpdateProduct(product);
+            return ProductHandler.UpdateProduct(product) == 1 ? "Se ha actualizado del producto" :
+                "No se puedo actualizar el producto";
         }
 
 

@@ -98,9 +98,9 @@ namespace api.ADO.NET
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                User user;
+                User user = null;
                 SqlCommand command = new SqlCommand("SELECT * FROM Usuario " +
-                    $"WHERE Id = {id}");
+                    $"WHERE Id = {id}", connection);
                 using (SqlDataReader dataReader = command.ExecuteReader())
                 {
                     if (dataReader.HasRows)
@@ -110,23 +110,21 @@ namespace api.ADO.NET
                             user = new User(dataReader.GetInt64(0), dataReader.GetString(1),
                                 dataReader.GetString(2), dataReader.GetString(3),
                                 dataReader.GetString(4), dataReader.GetString(5));
-                            return user;
+                            
                         }
                     }
-                    else
-                        return null;
                 }
+                return user;
             }
-            return null;
         }
         public static User GetUser(string userName)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                User user;
+                User user = null;
                 SqlCommand command = new SqlCommand("SELECT * FROM Usuario " +
-                    $"WHERE NombreUsuario = {userName}");
+                    $"WHERE NombreUsuario = '{userName}'", connection);
                 using (SqlDataReader dataReader = command.ExecuteReader())
                 {
                     if (dataReader.HasRows)
@@ -136,14 +134,11 @@ namespace api.ADO.NET
                             user = new User(dataReader.GetInt64(0), dataReader.GetString(1),
                                 dataReader.GetString(2), dataReader.GetString(3),
                                 dataReader.GetString(4), dataReader.GetString(5));
-                            return user;
                         }
                     }
-                    else
-                        return null;
                 }
+                return user;
             }
-            return null;
         }
         public static List<User> GetUsers()
         {
@@ -199,7 +194,7 @@ namespace api.ADO.NET
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand("DELETE FROM Usuario " +
-                    $"WHERE Id = {id}");
+                    $"WHERE Id = {id}", connection);
                 command.ExecuteNonQuery();
             }
         }
@@ -213,7 +208,7 @@ namespace api.ADO.NET
             {
                 connection.Open();
                 SqlCommand command = new SqlCommand("SELECT * FROM Usuario WHERE " +
-                    $"NombreUsuario = {userName} AND Contraseña = {password}", connection);
+                    $"NombreUsuario = '{userName}' AND Contraseña = '{password}'", connection);
                 using (SqlDataReader dataReader = command.ExecuteReader())
                 {
                     if (dataReader.HasRows)
@@ -231,6 +226,7 @@ namespace api.ADO.NET
                         return null;
 
                 }
+                return null;
             }
             return null;
         }

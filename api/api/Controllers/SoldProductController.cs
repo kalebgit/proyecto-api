@@ -5,14 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class SoldProductController : ControllerBase
     {
         [HttpGet("ProductoVendido/{idUsuario}")]
-        public void GetSoldProducts(long idUsuario)
+        public List<SoldProduct> GetSoldProducts(long idUsuario)
         {
-            SoldProductHandler.GetSoldProduct(idUsuario);
+            return SoldProductHandler.GetSoldProducts(idUsuario);
         }
     }
 }

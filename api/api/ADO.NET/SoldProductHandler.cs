@@ -65,9 +65,9 @@ namespace api.ADO.NET
         }
 
         // metodo READ
-        public static SoldProduct GetSoldProduct(long id)
+        public static List<SoldProduct> GetSoldProducts(long id)
         {
-            SoldProduct soldProduct;
+            List<SoldProduct> soldProducts = new List<SoldProduct>();
             using(SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
@@ -82,10 +82,12 @@ namespace api.ADO.NET
                     {
                         while (dataReader.Read())
                         {
-                            soldProduct = new SoldProduct(dataReader.GetInt32(0),
-                                dataReader.GetInt64(1), dataReader.GetInt64(2));
-                            return soldProduct;
+                            soldProducts.Add(new SoldProduct(dataReader.GetInt64(0),
+                                dataReader.GetInt32(1),
+                                dataReader.GetInt64(2), dataReader.GetInt64(3)));
+                            
                         }
+                        return soldProducts;
                     }
                     else
                         return null;
@@ -107,8 +109,9 @@ namespace api.ADO.NET
                     {
                         while (dataReader.Read())
                         {
-                            soldProducts.Add(new SoldProduct(dataReader.GetInt32(0),
-                                dataReader.GetInt64(1), dataReader.GetInt64(2)));
+                            soldProducts.Add(new SoldProduct(dataReader.GetInt64(0),
+                                dataReader.GetInt32(1),
+                                dataReader.GetInt64(2), dataReader.GetInt64(3)));
                         }
                         return soldProducts;
                     }
@@ -119,6 +122,38 @@ namespace api.ADO.NET
 
             }
         }
+        public static SoldProduct GetSoldProduct(long id)
+        {
+            SoldProduct soldProduct;
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                SqlCommand command = new SqlCommand("SELECT prodven.* " +
+                    "FROM ProductoVendido prodven " +
+                    "INNER JOIN " +
+                    "Venta ven " +
+                    $"ON prodven.IdVenta = ven.Id AND ven.IdUsuario = {id};", connection);
+                using (SqlDataReader dataReader = command.ExecuteReader())
+                {
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            soldProduct = new SoldProduct(dataReader.GetInt64(0),
+                                dataReader.GetInt32(1),
+                                dataReader.GetInt64(2), dataReader.GetInt64(3));
+                            return soldProduct;
+                        }
+                        
+                    }
+                    else
+                        return null;
+                }
+                return null;
+
+            }
+        }
+
 
     }
 }
